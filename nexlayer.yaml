@@ -1,0 +1,37 @@
+application:
+  name: zitadel
+  pods:
+  - name: app
+    image: ghcr.io/zitadel/zitadel:latest
+    path: /
+    servicePorts:
+    - 8080
+    vars:
+      ZITADEL_DATABASE_COCKROACH_HOST: "cockroach.pod"
+      ZITADEL_DATABASE_POSTGRES_HOST: "postgres.pod"
+      ZITADEL_DATABASE_POSTGRES_PORT: "5432"
+      ZITADEL_DATABASE_POSTGRES_DATABASE: "zitadel"
+      ZITADEL_DATABASE_POSTGRES_USER_USERNAME: "zitadel"
+      ZITADEL_DATABASE_POSTGRES_USER_PASSWORD: "zitadel"
+      ZITADEL_DATABASE_POSTGRES_USER_SSL_MODE: disable
+      ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME: "postgres"
+      ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD: "rootpass"
+      ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE: disable
+      ZITADEL_EXTERNALDOMAIN: "relaxed-weasel-zitadel.cloud.nexlayer.ai"
+      ZITADEL_EXTERNALPORT: "443"
+      ZITADEL_EXTERNALSECURE: "true"
+      ZITADEL_MASTERKEY: "MasterkeyNeedsTo32Characters!!!"
+      ZITADEL_TLS_ENABLED: "false"
+  - name: postgres
+    image: postgres:16-alpine
+    servicePorts:
+    - 5432
+    vars:
+      POSTGRES_DB: zitadel
+      POSTGRES_USER: zitadel
+      POSTGRES_PASSWORD: zitadel
+      POSTGRES_INITDB_ARGS: "--lc-collate=C --lc-ctype=C"
+    volumes:
+    - name: zitadel-db
+      mountPath: /var/lib/postgresql/data
+      size: 5Gi
