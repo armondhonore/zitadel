@@ -23,7 +23,7 @@ application:
       ZITADEL_MASTERKEY: "MasterkeyNeedsTo32Characters!!!"
       ZITADEL_TLS_ENABLED: "false"
   - name: postgres
-    image: postgres:16-alpine
+    image: mirror.gcr.io/library/postgres:16-alpine
     servicePorts:
     - 5432
     vars:
