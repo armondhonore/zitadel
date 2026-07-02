@@ -1,4 +1,5 @@
 application:
+  version: 2.0
   name: zitadel
   pods:
   - name: app
@@ -6,6 +7,7 @@ application:
     path: /
     servicePorts:
     - 8080
+    command: "start-from-init --masterkeyFromEnv"
     vars:
       ZITADEL_DATABASE_POSTGRES_HOST: "postgres.pod"
       ZITADEL_DATABASE_POSTGRES_PORT: "5432"
@@ -25,11 +27,13 @@ application:
     image: mirror.gcr.io/library/postgres:16-alpine
     servicePorts:
     - 5432
+    resourceType: statefulset
     vars:
       POSTGRES_DB: zitadel
       POSTGRES_USER: zitadel
       POSTGRES_PASSWORD: zitadel
       POSTGRES_INITDB_ARGS: "--lc-collate=C --lc-ctype=C"
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
     - name: zitadel-db
       mountPath: /var/lib/postgresql/data
